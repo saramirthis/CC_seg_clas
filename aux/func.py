@@ -1,7 +1,6 @@
 """
 Shape signature profile Module
 """
-
 import numpy as np
 import scipy.interpolate as spline
 import scipy.ndimage as nima
