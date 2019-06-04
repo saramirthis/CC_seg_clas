@@ -19,6 +19,8 @@ from sklearn import preprocessing, svm, metrics
 
 from scipy.cluster.hierarchy import dendrogram, linkage
 
+from joblib import dump
+
 from aux import default_config as df_conf
 from aux import func as sign
 from aux import aux_fnc as ax
@@ -78,9 +80,7 @@ for ind, mask_path in enumerate(dirs_all):
 
 print("Segmentations' vector: ", prof_vec.shape)
 
-fl_graph = True
-
-if fl_graph:
+if df_conf.FL_GRAPH:
 
     fig, (ax1, ax2) = plt.subplots(1,2, figsize=(18,5))
 
@@ -129,7 +129,7 @@ print('Valid set: ({})'.format(split_valid),X_valid_norm.shape, Y_valid.shape, n
 print('Test set: ({})'.format(1-(split_train+split_valid)), X_test_norm.shape,
       Y_test.shape,np.sum(Y_test)/len(Y_test))
 
-ax.print_div("Training SVM's")
+ax.print_div("Training individual SVM's")
 
 tuned_parameters = [{'kernel': ['rbf', 'linear'], 'C': [1, 10, 20, 50, 100]}]
 cv_s = StratifiedKFold(5, shuffle=True, random_state=2)
@@ -166,13 +166,18 @@ d = mm_conf[3]
 
 DM = (b+c)/(a+b+c+d)
 
-if fl_graph:
+if df_conf.FL_GRAPH:
     ax.plot_matrix(DM, classes=map(str, resols),title='DM matrix')
 
     Z = linkage(DM, 'average', optimal_ordering=False)
     fig = plt.figure(figsize=(15, 4))
     dend = dendrogram(Z, labels=np.arange(1,50))
     plt.show()
+
+if df_conf.FL_SAVE:
+    ax.print_div("Saving individual SVM's")
+    file2save = '{}arr_models_ind.joblib'.format(df_conf.DIR_SAVE)
+    dump(d_train, file2save)
 
 ax.print_div('Tunning ensemble size')
 
@@ -221,7 +226,7 @@ for n_cl in num_clusters:
     print('Number of clusters:', n_cl, ' / Final AUC: ', AUC_cl)
     clusters_auc.append(AUC_cl)
 
-if fl_graph:
+if df_conf.FL_GRAPH:
     plt.figure()
     plt.plot(clusters_auc, color='darkblue')
     plt.title('AUC per cluster size')
@@ -269,7 +274,13 @@ for clust in labels_list:
             sum_dist.append(np.sum(DM[r_clust,res_clust]))
         res_chs.append(res_clust[np.argmin(sum_dist)])
 
-ax.print_div('Training/Testing best ensemble')
+if df_conf.FL_SAVE:
+    ax.print_div('Saving fitting signature')
+    save_sign_refs = {'prof_ref': prof_vec[0:1], 'val_norm': val_norm, 'res_chs': res_chs}
+    file2save = '{}sign_refs.joblib'.format(df_conf.DIR_SAVE)
+    dump(save_sign_refs, file2save)
+
+ax.print_div('Training best ensemble')
 
 print('=========================================================================')
 print("Size ensemble:", len(list_clusters), "Chosen resolutions:", resols_ref[res_chs])
@@ -284,6 +295,13 @@ clf = GridSearchCV(svm.SVC(gamma='scale', class_weight='balanced', random_state=
 clf.fit(svm_ind, Y_valid)
 print(clf.best_estimator_)
 
+if df_conf.FL_SAVE:
+    ax.print_div('Saving best ensemble')
+    file2save = '{}ensemble_model.joblib'.format(df_conf.DIR_SAVE)
+    dump(clf, file2save)
+
+ax.print_div('Testing best ensemble')
+
 svm_ind = np.array([]).reshape(0,Y_test.shape[0])
 for res_ch in res_chs:
     svm_ind = np.vstack((svm_ind, d_train["string{0}".format(res_ch)].predict_proba(X_test_norm[:,res_ch,:])[:,1]))
@@ -296,7 +314,7 @@ __, opt_th = ax.plot_prc(y_true, y_pred_probs)
 y_pred = y_pred_probs > opt_th
 
 mx_conf = confusion_matrix(y_true, y_pred)
-if fl_graph:
+if df_conf.FL_GRAPH:
     ax.plot_matrix(mx_conf, classes=np.unique(y_true), fig_size=4,
     title='Confussion matrix', opt_bar=False)
 
