@@ -274,12 +274,6 @@ for clust in labels_list:
             sum_dist.append(np.sum(DM[r_clust,res_clust]))
         res_chs.append(res_clust[np.argmin(sum_dist)])
 
-if df_conf.FL_SAVE:
-    ax.print_div('Saving fitting signature')
-    save_sign_refs = {'prof_ref': prof_vec[0:1], 'val_norm': val_norm, 'res_chs': res_chs}
-    file2save = '{}sign_refs.joblib'.format(df_conf.DIR_SAVE)
-    dump(save_sign_refs, file2save)
-
 ax.print_div('Training best ensemble')
 
 print('=========================================================================')
@@ -330,3 +324,9 @@ print(tabulate([['AUC', AUC_cl],
                 ['Precision', precision],
                 ['F1', f1],],
                ['Metric', 'Value'], tablefmt='grid'))
+
+if df_conf.FL_SAVE:
+    ax.print_div('Saving reference parameters')
+    save_sign_refs = {'prof_ref': prof_vec[0:1], 'val_norm': val_norm, 'res_chs': res_chs, 'opt_th': opt_th}
+    file2save = '{}sign_refs.joblib'.format(df_conf.DIR_SAVE)
+    dump(save_sign_refs, file2save)
