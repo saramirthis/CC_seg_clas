@@ -289,10 +289,20 @@ clf = GridSearchCV(svm.SVC(gamma='scale', class_weight='balanced', random_state=
 clf.fit(svm_ind, Y_valid)
 print(clf.best_estimator_)
 
+y_pred_probs = clf.predict_proba(svm_ind)[:,1]
+__, opt_th = ax.plot_prc(Y_valid, y_pred_probs)
+
+print('Best separation threshold: {}'.format(opt_th))
+
 if df_conf.FL_SAVE:
     ax.print_div('Saving best ensemble')
     file2save = '{}ensemble_model.joblib'.format(df_conf.DIR_SAVE)
     dump(clf, file2save)
+
+    ax.print_div('Saving reference parameters')
+    save_sign_refs = {'prof_ref': prof_vec[0:1], 'val_norm': val_norm, 'res_chs': res_chs, 'opt_th': opt_th}
+    file2save = '{}sign_refs.joblib'.format(df_conf.DIR_SAVE)
+    dump(save_sign_refs, file2save)
 
 ax.print_div('Testing best ensemble')
 
@@ -303,7 +313,6 @@ svm_ind = svm_ind.T
 
 y_pred_probs = clf.predict_proba(svm_ind)[:,1]
 AUC_cl = ax.plot_roc(y_true, y_pred_probs)
-__, opt_th = ax.plot_prc(y_true, y_pred_probs)
 
 y_pred = y_pred_probs > opt_th
 
@@ -311,9 +320,6 @@ mx_conf = confusion_matrix(y_true, y_pred)
 if df_conf.FL_GRAPH:
     ax.plot_matrix(mx_conf, classes=np.unique(y_true), fig_size=4,
     title='Confussion matrix', opt_bar=False)
-
-ind_err_rand = np.where(np.logical_xor(y_true, y_pred))
-ind_err = test_index[ind_err_rand]
 
 accuracy, recall, precision, f1 = ax.report_metrics(mx_conf)
 
@@ -324,9 +330,3 @@ print(tabulate([['AUC', AUC_cl],
                 ['Precision', precision],
                 ['F1', f1],],
                ['Metric', 'Value'], tablefmt='grid'))
-
-if df_conf.FL_SAVE:
-    ax.print_div('Saving reference parameters')
-    save_sign_refs = {'prof_ref': prof_vec[0:1], 'val_norm': val_norm, 'res_chs': res_chs, 'opt_th': opt_th}
-    file2save = '{}sign_refs.joblib'.format(df_conf.DIR_SAVE)
-    dump(save_sign_refs, file2save)
