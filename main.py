@@ -1,5 +1,5 @@
-import sys,os, platform, random, glob
-from tabulate import tabulate
+import sys,os, platform, random, glob, sklearn
+#from tabulate import tabulate
 
 path = os.path.abspath('./aux/')
 if path not in sys.path:
@@ -31,6 +31,7 @@ print('Python version: ', platform.python_version())
 print('Numpy version: ', np.version.version)
 print('Scipy version: ', scipy.__version__)
 print('Matplotlib version: ', mpl.__version__)
+print('Scikit-learn version: ',sklearn.__version__)
 
 ax.print_div('Set list of directories with mask images')
 
@@ -138,8 +139,8 @@ acum_pred = np.array([]).reshape(0,Y_valid.shape[0])
 d_train = {}
 # Each resolution is used as feature shape alogn with one SVM classifier
 # Select best hyperparameters for each resolution/classifier using CV
-for res in np.arange(resols.shape[0]):
-    d_train['string{0}'.format(res)] = GridSearchCV(svm.SVC(gamma='scale', class_weight='balanced', random_state=4,
+for res in np.arange(resols.shape[0]).astype(int):
+    d_train['string{0}'.format(res)] = GridSearchCV(svm.SVC(gamma='auto', class_weight='balanced', random_state=4,
                                                             probability=True,),
                                                     tuned_parameters, iid=False, cv=cv_s, scoring='roc_auc')
     d_train['string{0}'.format(res)].fit(X_train_norm[:,res,:], Y_train)
@@ -211,7 +212,7 @@ for n_cl in num_clusters:
     for res_ch in res_chs:
         svm_ind = np.vstack((svm_ind, d_train['string{0}'.format(res_ch)].predict_proba(X_valid_norm[:,res_ch,:])[:,1]))
     svm_ind = svm_ind.T
-    clf = GridSearchCV(svm.SVC(gamma='scale', class_weight='balanced', random_state=16), tuned_parameters_ens,
+    clf = GridSearchCV(svm.SVC(gamma='auto', class_weight='balanced', random_state=16), tuned_parameters_ens,
                        iid=False, cv=cv_ens, scoring='roc_auc')
     clf.fit(svm_ind, Y_valid)
     svm_ind = np.array([]).reshape(0,Y_test.shape[0])
@@ -283,14 +284,14 @@ svm_ind = np.array([]).reshape(0,Y_valid.shape[0])
 for res_ch in res_chs:
     svm_ind = np.vstack((svm_ind, d_train["string{0}".format(res_ch)].predict_proba(X_valid_norm[:,res_ch,:])[:,1]))
 svm_ind = svm_ind.T
-clf = GridSearchCV(svm.SVC(gamma='scale', class_weight='balanced', random_state=16, probability=True),
+clf = GridSearchCV(svm.SVC(gamma='auto', class_weight='balanced', random_state=16, probability=True),
                    tuned_parameters_ens, iid=False, cv=cv_ens, scoring='roc_auc')
 
 clf.fit(svm_ind, Y_valid)
 print(clf.best_estimator_)
 
 y_pred_probs = clf.predict_proba(svm_ind)[:,1]
-__, opt_th = ax.plot_prc(Y_valid, y_pred_probs)
+__, opt_th = ax.plot_prc(Y_valid, y_pred_probs,fl_plot=df_conf.FL_GRAPH)
 
 print('Best separation threshold: {}'.format(opt_th))
 
@@ -312,7 +313,7 @@ for res_ch in res_chs:
 svm_ind = svm_ind.T
 
 y_pred_probs = clf.predict_proba(svm_ind)[:,1]
-AUC_cl = ax.plot_roc(y_true, y_pred_probs)
+AUC_cl = ax.plot_roc(y_true, y_pred_probs,fl_plot=df_conf.FL_GRAPH)
 
 y_pred = y_pred_probs > opt_th
 
@@ -323,10 +324,11 @@ if df_conf.FL_GRAPH:
 
 accuracy, recall, precision, f1 = ax.report_metrics(mx_conf)
 
-print('===== Final Report =====')
-print(tabulate([['AUC', AUC_cl],
-                ['Accuracy', accuracy],
-                ['Recall', recall],
-                ['Precision', precision],
-                ['F1', f1],],
-               ['Metric', 'Value'], tablefmt='grid'))
+#print('===== Final Report =====')
+#print(tabulate([['AUC', AUC_cl],
+#                ['Accuracy', accuracy],
+#                ['Recall', recall],
+#                ['Precision', precision],
+#                ['F1', f1],],
+#               ['Metric', 'Value'], tablefmt='grid'))
+print(AUC_cl,accuracy)

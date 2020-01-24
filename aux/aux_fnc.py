@@ -58,28 +58,28 @@ def plot_matrix(cm, classes, normalize=False, title='Confusion matrix', fig_size
 
     plt.show()
 
-def plot_roc(y_true, y_pred_prob):
+def plot_roc(y_true, y_pred_prob,fl_plot=True):
     """
     This function plots the ROC curve.
     """
     fpr, tpr, __ = metrics.roc_curve(y_true, y_pred_prob)
     roc_auc = metrics.auc(fpr, tpr)
-
-    plt.title('Receiver Operating Characteristic Val')
-    plt.plot(fpr, tpr, 'black', label = 'AUC = %0.2f' % roc_auc)
-    plt.legend(loc = 'lower right')
-    plt.plot([0, 1], [0, 1], 'gray', linestyle='--')
-    plt.xlim([0, 1])
-    plt.ylim([0, 1])
-    plt.ylabel('True Positive Rate')
-    plt.xlabel('False Positive Rate')
-    print('------------------------------------')
-    print('ROC Curve Teste:')
-    plt.show()
+    if fl_plot:
+        plt.title('Receiver Operating Characteristic Val')
+        plt.plot(fpr, tpr, 'black', label = 'AUC = %0.2f' % roc_auc)
+        plt.legend(loc = 'lower right')
+        plt.plot([0, 1], [0, 1], 'gray', linestyle='--')
+        plt.xlim([0, 1])
+        plt.ylim([0, 1])
+        plt.ylabel('True Positive Rate')
+        plt.xlabel('False Positive Rate')
+        print('------------------------------------')
+        print('ROC Curve Teste:')
+        plt.show()
 
     return roc_auc
 
-def plot_prc(y_true, y_pred_prob):
+def plot_prc(y_true, y_pred_prob,fl_plot=True):
     """
     This function plots the Precision Recall F1 curve.
     """
@@ -89,26 +89,26 @@ def plot_prc(y_true, y_pred_prob):
     average_precision = metrics.average_precision_score(y_true, y_pred_prob)
     # In matplotlib < 1.5, plt.fill_between does not have a 'step' argument
     step_kwargs = ({'step': 'post'} if 'step' in signature(plt.fill_between).parameters else {})
+    if fl_plot:
+        fig, ax = plt.subplots(1,2,figsize=(12,5))
 
-    fig, ax = plt.subplots(1,2,figsize=(12,5))
+        ax[0].step(recall, precision, color='b', alpha=0.2, where='post')
+        ax[0].fill_between(recall, precision, alpha=0.2, color='b', **step_kwargs)
+        ax[0].set_xlabel('Recall')
+        ax[0].set_ylabel('Precision')
+        ax[0].set_ylim([0.0, 1.05])
+        ax[0].set_xlim([0.0, 1.0])
+        ax[0].set_title('2-class Precision-Recall curve: AP={0:0.2f}'.format(average_precision))
 
-    ax[0].step(recall, precision, color='b', alpha=0.2, where='post')
-    ax[0].fill_between(recall, precision, alpha=0.2, color='b', **step_kwargs)
-    ax[0].set_xlabel('Recall')
-    ax[0].set_ylabel('Precision')
-    ax[0].set_ylim([0.0, 1.05])
-    ax[0].set_xlim([0.0, 1.0])
-    ax[0].set_title('2-class Precision-Recall curve: AP={0:0.2f}'.format(average_precision))
-
-    ax[1].set_title('Precision and Recall Scores as a function of the decision threshold')
-    ax[1].plot(threshold, precision[:-1], 'b-', label='Precision')
-    ax[1].plot(threshold, recall[:-1], 'g-', label='Recall')
-    ax[1].plot(threshold, f1[:-1], 'r-', label='f1')
-    ax[1].axvline(x=f1_max_ix, label='Th at = {0:.2f}'.format(f1_max_ix), c='r', linestyle='--')
-    ax[1].set_ylabel('Score')
-    ax[1].set_xlabel('Decision Threshold')
-    ax[1].legend(loc='best')
-    plt.show()
+        ax[1].set_title('Precision and Recall Scores as a function of the decision threshold')
+        ax[1].plot(threshold, precision[:-1], 'b-', label='Precision')
+        ax[1].plot(threshold, recall[:-1], 'g-', label='Recall')
+        ax[1].plot(threshold, f1[:-1], 'r-', label='f1')
+        ax[1].axvline(x=f1_max_ix, label='Th at = {0:.2f}'.format(f1_max_ix), c='r', linestyle='--')
+        ax[1].set_ylabel('Score')
+        ax[1].set_xlabel('Decision Threshold')
+        ax[1].legend(loc='best')
+        plt.show()
 
     return average_precision, f1_max_ix
 

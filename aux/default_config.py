@@ -2,8 +2,8 @@
 This module contains all the configuration of simulation environment
 """
 
-DIR_BAS = '/winuno/Unicamp-FEEC/CC_clas_project/images_will/dados_pipe/'
-DIR_SAVE = '/home/wilomaku/Documents/reps/CC_seg_clas/saves/'
+DIR_BAS = '/home/jovyan/work/dataset/'
+DIR_SAVE = '/home/jovyan/work/CC_seg_clas/saves/'
 
 SMOOTHNESS = 700
 DEGREE = 5
@@ -21,4 +21,4 @@ POINTS = 500
 CHOSEN_METHOD = 'best_acc'
 
 FL_GRAPH = False
-FL_SAVE = False
+FL_SAVE = True
