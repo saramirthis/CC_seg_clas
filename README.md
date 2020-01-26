@@ -4,6 +4,8 @@
 
 This Readme file holds instructions for reproduction of the work **A framework for quality control of corpus callosum segmentation in large-scale studies**
 
+![Alt text](images/Graphical_abstract.png?raw=true "Title")
+
 ## Environment, used libraries and dependencies
 
 * Python 3.5.4
@@ -17,7 +19,7 @@ This Readme file holds instructions for reproduction of the work **A framework f
 
 This framework receives binary mask, in nifti format (.nii.gz or .nii), and returns a quality score ranging from 0% for completely correct segmentation to 100% for completely incorrect segmentation. The model was trained in 481 corpus callosum segmentations and tested in 207 samples.
 
-![Alt text](figures/workflow_simp.png?raw=true "Title")
+![Alt text](images/Framework_quality.png?raw=true "Title")
 
 ## Files structure
 
