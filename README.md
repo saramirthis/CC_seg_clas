@@ -39,13 +39,29 @@ These files are located in the root of the git repository **wilomaku/CC_seg_clas
 
 Please, pay attention to these instructions and follow carefully. Besides Jupyter notebook installed, you must have a work directory with three elements: dataset directory, ipyhton script and library directory with the necessary functions.
 
+Run test scrip: python 3 test.py <dir_in> <pattern> <msp> <-opt_th>
+
+'dir_in': Databse Input directory
+pattern: Pattern present in all the nifti file names
+msp: Slice to be selected on sagittal plane
+-opt_th: Decision threshold to separate classes (If this value is not passed, the optimal threshold is used instead.
+
 ## Instructions to execute train script (You want to train the framework using your dataset)
 
 Please, pay attention to these instructions and follow carefully. Besides Jupyter notebook installed, you must have a work directory with three elements: dataset directory, ipyhton script and library directory with the necessary functions.
 
+## Instructions to execute in Docker image
+
+Because the model is dependant on the Scikit-learn version, we used a Docker image to guarantee reproducibility:
+
+Install Docker: https://docs.docker.com/install/
+Download Docker image: docker pull miykael/nipype_level0 (https://hub.docker.com/r/miykael/nipype_level0)
+Run Docker image on Jupyter mode: docker run -p 8889:8888 -v ~/Documents/:/home/jovyan/work -it miykael/nipype_level0
+Run Docker image on terminal mode: docker run -p 8889:8888 -v ~/Documents/:/home/jovyan/work -it miykael/nipype_level0 /bin/bash
+
 ## Original publication
 
-We are pleased if you use our framework or this code, we ask you to kindly cite our paper:
+We are pleased if you use our framework, we ask you to kindly cite our paper:
 
 Herrera, W. G., Pereira, M., Bento, M., Lapa, A. T., Appenzeller, S., & Rittner, L. (2020). A framework for quality control of corpus callosum segmentation in large-scale studies. Journal of Neuroscience Methods, 108593. (https://doi.org/10.1016/j.jneumeth.2020.108593).
 
