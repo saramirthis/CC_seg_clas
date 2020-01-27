@@ -65,6 +65,9 @@ or every mask in its respective folder:
     - [mask1.nii]
   - __folder2__
     - [mask2.nii]
+  .
+  .
+  .
 ```
 
 Also, it is expected the nifti mask files to be 2D (in sagittal view) or 3D (in which case, the first dimension refers to the sagittal view). Copy the test dataset into your directory: cp <your_dir>/<your_test_dir>
@@ -91,6 +94,9 @@ Examples:
 - __<your_test_dir>__
   - [mask1.nii]
   - [mask2.nii.gz]
+  .
+  .
+  .
 ```
 
 or every mask in its respective folder:
@@ -100,6 +106,9 @@ or every mask in its respective folder:
     - [mask1.nii]
   - __folder2__
     - [mask2.nii]
+  .
+  .
+  .
 ```
 
 Also, it is expected the nifti mask files to be 2D (in sagittal view) or 3D (in which case, the first dimension refers to the sagittal view). Copy the test dataset into your directory: cp <your_dir>/<your_test_dir>
