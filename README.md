@@ -77,46 +77,39 @@ Examples:
 
 6. After executed the output file with the quality score will be available in the save directory (save directory path (DIR_SAVE) can be changed in **default_config.py**).
 
-## Instructions to execute train script (You want to train the framework using your dataset)
+### Train script (You want to train the framework using your dataset)
 
 4. You need to have your dataset. The framework only works with binary nifti masks (.nii or .nii.gz are the only extensions accepted). Your masks must be in a folder (<your_test_dir>) either directly in the root of <your_test_dir>:
 
-<your_test_dir>
-│   mask1.nii
-│   mask2.nii.gz
++-- <your_test_dir>
+|   +-- mask1.nii
+|   +-- mask2.nii.gz
 
 or every mask in its respective folder:
 
-<your_test_dir>
-└───folder1
-│   │   mask1.nii
-└───folder2
-│   │   mask2.nii.gz
++-- <your_test_dir>
+|   +-- folder1
+|   +-- |   +-- mask1.nii
+|   +-- folder2
+|   +-- |   +-- mask2.nii.gz
 
 Also, it is expected the nifti mask files to be 2D (in sagittal view) or 3D (in which case, the first dimension refers to the sagittal view). Copy the test dataset into your directory: cp <your_dir>/<your_test_dir>
 
-5. Run the test script providing the proper arguments: python 3 test.py <dir_in> <pattern> <msp> <-opt_th>
+5. You need to have the proper labels for training the model. The label files must be on a csv file named **labels.csv** with two columns: Subject with the path or an partial identifier of the name and Label with the label associated to every Subject (0 for correct segmentation and 1 for incorrect segmentation).
 
-dir_in: Databse Input directory.
--pattern[Optional]: Present pattern in all the nifti file names. If no particular pattern is present in your name files do not pass anything.
--msp[Optional]: Slice to be selected on sagittal plane. If 3D masks are used you must pass slice with valid mask, please note that the by-default value is 90. If 2D masks are used do not pass anything.
--opt_th[Optional]: Decision threshold to separate classes. If this value is not passed, the optimal threshold is used instead.
+6. Set the hyper-parameters according to your dataset. I recommend you run the notebook **main.ipynb** to make sure your configuration and outputs are working as expected before run the train script. This notebook works in the same way as the train script.
 
-Examples: 
-* python 3 test.py /home/jovyan/work/dataset/ (Example with 2D masks with no particular pattern in file names)
-* python 3 test.py /home/jovyan/work/dataset/ -pattern mask -opt_th 0.5 (Example with 2D masks with 'mask' string present in file names to be evaluated. The decision threshold applied is 0.5)
-* python 3 test.py /home/jovyan/work/dataset/ -msp 100 -opt_th 0.5 (Example with 3D masks. It is selected the 100th sagittal slice. The decision threshold applied is 0.5)
+7. Run the train script: python main.py. The script will save the trained models in the save directory (save directory path (DIR_SAVE) can be changed in **default_config.py**).
 
-6. After executed the output file with the quality score will be available in the save directory (save directory path (DIR_SAVE) can be changed in **default_config.py**).
+### Instructions to execute on Docker image in either, test or train mode:
 
-## Instructions to execute in Docker image
+Because the model is fully dependant on the Scikit-learn version, I used a Docker image to guarantee reproducibility from now on. The Docker image fulfills all the software requirements and it is only necessary to provide the cloned repository with the scripts. I used a public image in a Docker Hub with the required configuration to execute the scripts including Nibabel to deal with nifti files.
 
-Because the model is fully dependant on the Scikit-learn version, I used a Docker image to guarantee reproducibility:
-
-Install Docker: https://docs.docker.com/install/
-Download Docker image: docker pull miykael/nipype_level0 (https://hub.docker.com/r/miykael/nipype_level0)
-Run Docker image on Jupyter mode: docker run -p 8889:8888 -v ~/Documents/:/home/jovyan/work -it miykael/nipype_level0
-Run Docker image on terminal mode: docker run -p 8889:8888 -v ~/Documents/:/home/jovyan/work -it miykael/nipype_level0 /bin/bash
+4. Install Docker on your machine: https://docs.docker.com/install/
+5. Download Docker image: docker pull miykael/nipype_level0 (https://hub.docker.com/r/miykael/nipype_level0)
+6. Run Docker image on Jupyter mode: docker run -p 8889:8888 -v ~/Documents/:/home/jovyan/work -it miykael/nipype_level0
+7. Run Docker image on terminal mode: docker run -p 8889:8888 -v ~/Documents/:/home/jovyan/work -it miykael/nipype_level0 /bin/bash
+8. Being in the Docker propmt you can proceed with the Instructions to either **Test script** or **Test script** as explained previously.
 
 ## Original publication
 
