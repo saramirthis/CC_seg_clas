@@ -66,19 +66,52 @@ Also, it is expected the nifti mask files to be 2D (in sagittal view) or 3D (in 
 5. Run the test script providing the proper arguments: python 3 test.py <dir_in> <pattern> <msp> <-opt_th>
 
 dir_in: Databse Input directory.
-pattern: Pattern present in all the nifti file names. If no particular pattern is present in your name files.
-msp: Slice to be selected on sagittal plane, only for 3D nifti masks.
--opt_th: Decision threshold to separate classes (If this value is not passed, the optimal threshold is used instead).
+-pattern[Optional]: Present pattern in all the nifti file names. If no particular pattern is present in your name files do not pass anything.
+-msp[Optional]: Slice to be selected on sagittal plane. If 3D masks are used you must pass slice with valid mask, please note that the by-default value is 90. If 2D masks are used do not pass anything.
+-opt_th[Optional]: Decision threshold to separate classes. If this value is not passed, the optimal threshold is used instead.
 
-Example: python 3 test.py /home/jovyan/work/dataset/ '' 90 0.5
+Examples: 
+* python 3 test.py /home/jovyan/work/dataset/ (Example with 2D masks with no particular pattern in file names)
+* python 3 test.py /home/jovyan/work/dataset/ -pattern mask -opt_th 0.5 (Example with 2D masks with 'mask' string present in file names to be evaluated. The decision threshold applied is 0.5)
+* python 3 test.py /home/jovyan/work/dataset/ -msp 100 -opt_th 0.5 (Example with 3D masks. It is selected the 100th sagittal slice. The decision threshold applied is 0.5)
+
+6. After executed the output file with the quality score will be available in the save directory (save directory path (DIR_SAVE) can be changed in **default_config.py**).
 
 ## Instructions to execute train script (You want to train the framework using your dataset)
 
-Please, pay attention to these instructions and follow carefully. Besides Jupyter notebook installed, you must have a work directory with three elements: dataset directory, ipyhton script and library directory with the necessary functions.
+4. You need to have your dataset. The framework only works with binary nifti masks (.nii or .nii.gz are the only extensions accepted). Your masks must be in a folder (<your_test_dir>) either directly in the root of <your_test_dir>:
+
+<your_test_dir>
+│   mask1.nii
+│   mask2.nii.gz
+
+or every mask in its respective folder:
+
+<your_test_dir>
+└───folder1
+│   │   mask1.nii
+└───folder2
+│   │   mask2.nii.gz
+
+Also, it is expected the nifti mask files to be 2D (in sagittal view) or 3D (in which case, the first dimension refers to the sagittal view). Copy the test dataset into your directory: cp <your_dir>/<your_test_dir>
+
+5. Run the test script providing the proper arguments: python 3 test.py <dir_in> <pattern> <msp> <-opt_th>
+
+dir_in: Databse Input directory.
+-pattern[Optional]: Present pattern in all the nifti file names. If no particular pattern is present in your name files do not pass anything.
+-msp[Optional]: Slice to be selected on sagittal plane. If 3D masks are used you must pass slice with valid mask, please note that the by-default value is 90. If 2D masks are used do not pass anything.
+-opt_th[Optional]: Decision threshold to separate classes. If this value is not passed, the optimal threshold is used instead.
+
+Examples: 
+* python 3 test.py /home/jovyan/work/dataset/ (Example with 2D masks with no particular pattern in file names)
+* python 3 test.py /home/jovyan/work/dataset/ -pattern mask -opt_th 0.5 (Example with 2D masks with 'mask' string present in file names to be evaluated. The decision threshold applied is 0.5)
+* python 3 test.py /home/jovyan/work/dataset/ -msp 100 -opt_th 0.5 (Example with 3D masks. It is selected the 100th sagittal slice. The decision threshold applied is 0.5)
+
+6. After executed the output file with the quality score will be available in the save directory (save directory path (DIR_SAVE) can be changed in **default_config.py**).
 
 ## Instructions to execute in Docker image
 
-Because the model is dependant on the Scikit-learn version, we used a Docker image to guarantee reproducibility:
+Because the model is fully dependant on the Scikit-learn version, I used a Docker image to guarantee reproducibility:
 
 Install Docker: https://docs.docker.com/install/
 Download Docker image: docker pull miykael/nipype_level0 (https://hub.docker.com/r/miykael/nipype_level0)
