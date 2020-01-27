@@ -124,10 +124,14 @@ Also, it is expected the nifti mask files to be 2D (in sagittal view) or 3D (in 
 Because the model is fully dependant on the Scikit-learn version, I used a Docker image to guarantee reproducibility from now on. The Docker image fulfills all the software requirements and it is only necessary to provide the cloned repository with the scripts. I used a public image in a Docker Hub with the required configuration to execute the scripts including Nibabel to deal with nifti files.
 
 4. Install Docker on your machine: https://docs.docker.com/install/
+
 5. Download Docker image: docker pull miykael/nipype_level0 (https://hub.docker.com/r/miykael/nipype_level0)
+
 6. Run Docker image on Jupyter mode: docker run -p 8889:8888 -v ~/Documents/:/home/jovyan/work -it miykael/nipype_level0
+
 7. Run Docker image on terminal mode: docker run -p 8889:8888 -v ~/Documents/:/home/jovyan/work -it miykael/nipype_level0 /bin/bash
-8. Being in the Docker propmt you can proceed with the Instructions to either **Test script** or **Test script** as explained previously.
+
+8. Being in the Docker prompt you can proceed with the Instructions to either **Test script** or **Train script** as explained previously.
 
 ## Original publication
 
