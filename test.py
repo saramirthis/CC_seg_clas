@@ -17,8 +17,8 @@ from aux import aux_fnc as ax
 
 parser = argparse.ArgumentParser(description='Segmentation Quality control Framework')
 parser.add_argument('dir_in', type=str, help='Databse Input directory')
-parser.add_argument('pattern', type=str, help='Pattern present in all the nifti file names')
 parser.add_argument('msp', type=int, help='Slice to be selected on sagittal plane')
+parser.add_argument('-pattern', type=str, help='Pattern present in all the nifti file names', default='')
 parser.add_argument('-opt_th', type=float, help='Threshold to separate classes')
 args = parser.parse_args()
 
@@ -31,11 +31,14 @@ print('Scikit-learn version: ',sklearn.__version__)
 ax.print_div('Set list of directories with mask images')
 
 dirs_all = []
-for filename in Path(args.dir_in).rglob('*{}*.nii*'.format(args.pattern)):
+if args.pattern == '':
+    dir_search = '*.nii*'
+else:
+    dir_search = '*{}*.nii*'.format(args.pattern)
+for filename in Path(args.dir_in).rglob(dir_search):
     dirs_all.append(filename.resolve())
 
 print('Found dirs:',len(dirs_all))
-
 ax.print_div('Extracting and fitting Signatures')
 
 file2load = '{}sign_refs.joblib'.format(df_conf.DIR_SAVE)
@@ -78,6 +81,9 @@ clf = load(file2load)
 res_chs = parms_refs['res_chs']
 
 ax.print_div("Testing...")
+
+if X_test.shape[0] == 0:
+    raise Exception('No files were found to be used. Please, provide a valid directory with nii or nii.gz files and verify the pattern to be used.')
 
 svm_ind = np.array([]).reshape(0,X_test.shape[0])
 for res_ch in res_chs:
