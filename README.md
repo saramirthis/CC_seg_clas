@@ -53,6 +53,9 @@ Please, pay attention to these instructions and follow carefully.
 - __<your_test_dir>__
   - [mask1.nii]
   - [mask2.nii.gz]
+  .
+  .
+  .
 ```
 
 or every mask in its respective folder:
