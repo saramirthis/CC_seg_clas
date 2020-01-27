@@ -81,12 +81,14 @@ Examples:
 
 4. You need to have your dataset. The framework only works with binary nifti masks (.nii or .nii.gz are the only extensions accepted). Your masks must be in a folder (<your_test_dir>) either directly in the root of <your_test_dir>:
 
+.
 +-- <your_test_dir>
 |   +-- mask1.nii
 |   +-- mask2.nii.gz
 
 or every mask in its respective folder:
 
+.
 +-- <your_test_dir>
 |   +-- folder1
 |   +-- |   +-- mask1.nii
