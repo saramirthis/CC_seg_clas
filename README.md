@@ -23,30 +23,54 @@ This framework receives binary mask, in nifti format (.nii.gz or .nii), and retu
 
 ## Files structure
 
-This structure tree folder is located in the root of the git repository **wilomaku/CC_seg_clas**:
+The structure of the tree folder is located in the root of the git repository **wilomaku/CC_seg_clas**:
 
-* aux: Directory with main (func.py) and auxiliar (aux_fnc.py) functions. The default configuration (default_config.py) for train and test the framework is available too. The file labels.csv is only used to train the model and this file is not useful for the user.
-* funcs: Empty directory. Only used to compatibility purposes.
+* aux: Directory with main (func.py) and auxiliar (aux_fnc.py) functions. The default configuration (**default_config.py**) for train and test the framework is available too. The file labels.csv was only used to train the model and this file is not longer useful for the user.
+* funcs: Empty directory. Only used for compatibility purposes.
 * images: Necessary images for notebook visualization. The user should not require to do anything here.
-* saves: Saved models used to test the framework. arr_models_ind.joblib has the saved models for the individual classifiers,  ensemble_model.joblib is the ensemble final model and sign_refs.joblib has the partial extracted signatures.
+* saves: Saved models used to test the framework. **arr_models_ind.joblib** has the saved models for the individual classifiers,  **ensemble_model.joblib** is the ensemble final model and **sign_refs.joblib** has the partial extracted signatures.
 
 These files are located in the root of the git repository **wilomaku/CC_seg_clas**:
 
 * README.md: File with the repository instructions.
 * main.ipynb: Jupyter notebook with the reproducible paper in a step-by-step fashion.
-* main.py: Script to train and test the quality control framework.
-* test.py: Script to test among your segmentations.
+* main.py: Script to train and test the quality control framework. Useful if you have your won dataset to train.
+* test.py: Script to test among your segmentations. Useful if you want to test on your own dataset.
 
-## Instructions to execute test script (You have your own segmentations and you want to perform quality control)
+## Instructions to use this repository:
 
-Please, pay attention to these instructions and follow carefully. Besides Jupyter notebook installed, you must have a work directory with three elements: dataset directory, ipyhton script and library directory with the necessary functions.
+Please, pay attention to these instructions and follow carefully.
 
-Run test scrip: python 3 test.py <dir_in> <pattern> <msp> <-opt_th>
+1. Move to your directory: cd <your_dir>
+2. Clone the repository: git clone https://github.com/wilomaku/CC_seg_clas.git
+3. If you want to run/train/test any file on this framework, first you need to change the DIR_BAS and DIR_SAVE variables to your paths in **default_config.py**.
 
-'dir_in': Databse Input directory
-pattern: Pattern present in all the nifti file names
-msp: Slice to be selected on sagittal plane
--opt_th: Decision threshold to separate classes (If this value is not passed, the optimal threshold is used instead.
+### Test script (You want to perform quality control on your own segmentation dataset)
+
+4. You need to have your dataset. The framework only works with binary nifti masks (.nii or .nii.gz are the only extensions accepted). Your masks must be in a folder (<your_test_dir>) either directly in the root of <your_test_dir>:
+
+<your_test_dir>
+│   mask1.nii
+│   mask2.nii.gz
+
+or every mask in its respective folder:
+
+<your_test_dir>
+└───folder1
+│   │   mask1.nii
+└───folder2
+│   │   mask2.nii.gz
+
+Also, it is expected the nifti mask files to be 2D (in sagittal view) or 3D (in which case, the first dimension refers to the sagittal view). Copy the test dataset into your directory: cp <your_dir>/<your_test_dir>
+
+5. Run the test script providing the proper arguments: python 3 test.py <dir_in> <pattern> <msp> <-opt_th>
+
+dir_in: Databse Input directory.
+pattern: Pattern present in all the nifti file names. If no particular pattern is present in your name files.
+msp: Slice to be selected on sagittal plane, only for 3D nifti masks.
+-opt_th: Decision threshold to separate classes (If this value is not passed, the optimal threshold is used instead).
+
+Example: python 3 test.py /home/jovyan/work/dataset/ '' 90 0.5
 
 ## Instructions to execute train script (You want to train the framework using your dataset)
 
