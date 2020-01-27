@@ -49,17 +49,20 @@ Please, pay attention to these instructions and follow carefully.
 
 4. You need to have your dataset. The framework only works with binary nifti masks (.nii or .nii.gz are the only extensions accepted). Your masks must be in a folder (<your_test_dir>) either directly in the root of <your_test_dir>:
 
-<your_test_dir>
-│   mask1.nii
-│   mask2.nii.gz
+```markdown
+- __<your_test_dir>__
+  - [mask1.nii]
+  - [mask2.nii.gz]
+```
 
 or every mask in its respective folder:
-
-<your_test_dir>
-└───folder1
-│   │   mask1.nii
-└───folder2
-│   │   mask2.nii.gz
+```markdown
+- __<your_test_dir>__
+  - __folder1__
+    - [mask1.nii]
+  - __folder2__
+    - [mask2.nii]
+```
 
 Also, it is expected the nifti mask files to be 2D (in sagittal view) or 3D (in which case, the first dimension refers to the sagittal view). Copy the test dataset into your directory: cp <your_dir>/<your_test_dir>
 
@@ -81,19 +84,20 @@ Examples:
 
 4. You need to have your dataset. The framework only works with binary nifti masks (.nii or .nii.gz are the only extensions accepted). Your masks must be in a folder (<your_test_dir>) either directly in the root of <your_test_dir>:
 
-.
-+-- <your_test_dir>
-|   +-- mask1.nii
-|   +-- mask2.nii.gz
+```markdown
+- __<your_test_dir>__
+  - [mask1.nii]
+  - [mask2.nii.gz]
+```
 
 or every mask in its respective folder:
-
-.
-+-- <your_test_dir>
-|   +-- folder1
-|   +-- |   +-- mask1.nii
-|   +-- folder2
-|   +-- |   +-- mask2.nii.gz
+```markdown
+- __<your_test_dir>__
+  - __folder1__
+    - [mask1.nii]
+  - __folder2__
+    - [mask2.nii]
+```
 
 Also, it is expected the nifti mask files to be 2D (in sagittal view) or 3D (in which case, the first dimension refers to the sagittal view). Copy the test dataset into your directory: cp <your_dir>/<your_test_dir>
 
