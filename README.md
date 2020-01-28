@@ -39,7 +39,8 @@ These files are located in the root of the git repository **wilomaku/CC_seg_clas
 
 ## Instructions to use this repository:
 
-Please, pay attention to these instructions and follow carefully.
+Please, pay attention to these instructions and follow carefully. Before proceed, you must guarantee that your system is as similar as possible to the environment, used libraries and dependencies described before.
+
 
 1. Move to your directory: cd <your_dir>
 2. Clone the repository: git clone https://github.com/wilomaku/CC_seg_clas.git
@@ -129,7 +130,7 @@ Because the model is fully dependant on the Scikit-learn version, I used a Docke
 
 6. Run Docker image on Jupyter mode: docker run -p 8889:8888 -v ~/Documents/:/home/jovyan/work -it miykael/nipype_level0
 
-7. Run Docker image on terminal mode: docker run -p 8889:8888 -v ~/Documents/:/home/jovyan/work -it miykael/nipype_level0 /bin/bash
+7. Run Docker image on terminal mode: docker run -v ~/Documents/:/home/jovyan/work -it miykael/nipype_level0 /bin/bash
 
 8. Being in the Docker prompt you can proceed with the Instructions to either **Test script** or **Train script** as explained previously.
 
