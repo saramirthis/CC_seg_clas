@@ -140,5 +140,4 @@ We are pleased if you use our work. Kindly cite our paper:
 Herrera, W. G., Pereira, M., Bento, M., Lapa, A. T., Appenzeller, S., & Rittner, L. (2020). A framework for quality control of corpus callosum segmentation in large-scale studies. Journal of Neuroscience Methods, 108593. (https://doi.org/10.1016/j.jneumeth.2020.108593).
 
 Questions? Suggestions? Please write to wjgarciah@unal.edu.co
-
 MIT License Copyright (c) 2019 William Herrera
