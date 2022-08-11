@@ -2,11 +2,11 @@
 Auxiliar functions Module
 """
 
-import math, itertools, glob
+import math, glob
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn import metrics
-from sklearn.utils.fixes import signature
+from funcsigs import signature
 from scipy.ndimage.morphology import binary_erosion
 import nibabel as nib
 import matplotlib.pyplot as plt
