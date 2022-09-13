@@ -1,9 +1,11 @@
 """
-Shape signature profile Module
+    Shape signature profile Module
 """
+
 import numpy as np
 import scipy.interpolate as spline
 import scipy.ndimage as nima
+
 
 def sign_extract(seg, resols, smoothness, points): #Function for shape signature extraction
     splines = get_spline(seg,smoothness)
@@ -11,8 +13,8 @@ def sign_extract(seg, resols, smoothness, points): #Function for shape signature
     sign_vect = np.array([]).reshape(0,points) #Initializing temporal signature vector
     for resol in resols:
         sign_vect = np.vstack((sign_vect, get_profile(splines, n_samples=points, radius=resol)))
-
     return sign_vect
+
 
 def sign_fit(sig_ref, sig_fit, points): #Function for signature fitting
     dif_curv = []
@@ -20,9 +22,8 @@ def sign_fit(sig_ref, sig_fit, points): #Function for signature fitting
         dif_curv.append(np.abs(np.sum((sig_ref - np.roll(sig_fit[0],shift))**2)))
     return np.apply_along_axis(np.roll, 1, sig_fit, np.argmin(dif_curv))
 
-def compute_angles(pivot, anterior, posterior):
-    max_angle = np.pi*2
 
+def compute_angles(pivot, anterior, posterior):
     def angles(vectors):
         return np.arctan2(vectors[1], vectors[0])
 
@@ -52,8 +53,8 @@ def get_profile(tck, n_samples, radius):
     anterior = eval_spline(tck, t_anterior)
     t_posterior = np.mod(t_pivot+radius, 1)
     posterior = eval_spline(tck, t_posterior)
-
     return compute_angles(pivot, anterior, posterior)
+
 
 def get_seq_graph(edge):
 
@@ -90,25 +91,27 @@ def get_seq_graph(edge):
         ext_el = graph[(act_el)][ind_el]
         seq.append(ext_el)
     lst1, lst2 = zip(*seq)
-
     return (np.array(lst1), np.array(lst2))
+
 
 def get_spline(seg,s):
     nz = np.nonzero(seg)
     x1,x2,y1,y2 = np.amin(nz[0]),np.amax(nz[0]),np.amin(nz[1]),np.amax(nz[1])
     M0 = seg[x1-5:x2+5,y1-5:y2+5]
     nescala = [4*M0.shape[-2],4*M0.shape[-1]]
-    M0 = resizedti(M0,nescala).astype('bool')
+    M0 = resizedti(M0,nescala).astype("bool")
     M0_ero = nima.binary_erosion(M0).astype(M0.dtype)
     con_M0 = np.logical_xor(M0_ero,M0)
     seq = get_seq_graph(con_M0)
     tck, _ = spline.splprep(seq, k=5, s=s)
-
     return tck
 
-def resizedti(img,shape):
 
+def resizedti(img,shape):
     y,x = np.indices(shape)
     x = x/(shape[1]/img.shape[-1])
     y = y/(shape[0]/img.shape[-2])
-    return img[y.astype('int'),x.astype('int')]
+    print(np.shape(img))
+    print(x)
+    print(y)
+    return img[y.astype("int"), x.astype("int")]

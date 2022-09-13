@@ -81,7 +81,7 @@ dir_in: Databse input directory.
 
 Examples: 
 * python test.py /home/jovyan/work/dataset/ (Example with 2D masks with no particular pattern in file names)
-* python test.py /home/jovyan/work/dataset/ -pattern mask -opt_th 0.5 (Example with 2D masks with 'mask' string present in file names to be evaluated. The decision threshold applied is 0.5)
+* python test.py /home/jovyan/work/dataset/ -pattern mask -opt_th 0.5 (Example with 2D masks with "mask" string present in file names to be evaluated. The decision threshold applied is 0.5)
 * python test.py /home/jovyan/work/dataset/ -msp 100 -opt_th 0.5 (Example with 3D masks. The 100th sagittal slice is selected. The decision threshold applied is 0.5)
 
 6. After executed, the output file with the quality score will be available in the save directory (the save directory path (DIR_SAVE) can be changed in **default_config.py**).
@@ -113,7 +113,7 @@ or every mask in its respective folder:
 
 It is expected that the nifti mask files are in 2D (in sagittal view) or 3D (in which case, the first dimension refers to the sagittal view). Copy the test dataset into your directory: cp <your_dir>/<your_test_dir>
 
-5. You need to have the proper labels for training the model. The label files must be in a csv file named **labels.csv** with two columns: 'Subject', containing the path or a partial identifier of the name; and 'Label', containing the label associated to every Subject (0 for correct segmentation and 1 for incorrect segmentation).
+5. You need to have the proper labels for training the model. The label files must be in a csv file named **labels.csv** with two columns: "Subject", containing the path or a partial identifier of the name; and "Label", containing the label associated to every Subject (0 for correct segmentation and 1 for incorrect segmentation).
 
 6. Set the hyper-parameters according to your dataset. I recommend you run the notebook **main.ipynb** to make sure your configuration and outputs are working as expected before run the train script. This notebook works in the same way as the train script.
 

@@ -1,0 +1,1 @@
+docker run --rm -it -h ubuntu -v $PWD:$PWD -w $PWD --user=$(id -u):$(id -g) cc_seg
