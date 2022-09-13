@@ -42,7 +42,7 @@ for filename in Path(args.dir_in).rglob(dir_search):
 print("Found dirs:",len(dirs_all))
 ax.print_div("Extracting and fitting Signatures")
 
-file2load = os.path.join(df_conf.DIR_SAVE, "sign_refs.joblib")
+file2load = os.path.join(df_conf.DIR_MODEL, "sign_refs.joblib")
 parms_refs = load(file2load)
 prof_ref = parms_refs["prof_ref"]
 
@@ -52,6 +52,7 @@ prof_vec = np.empty((len(dirs_all),resols.shape[0],df_conf.POINTS))
 
 for ind, mask_path in enumerate(dirs_all):
     img_mask_msp = nib.load(str(mask_path)).get_fdata()
+    print("shape ", img_mask_msp.shape)
     if len(img_mask_msp.shape) == 3:
         img_mask_msp = img_mask_msp[args.msp]
     elif len(img_mask_msp.shape) == 2:
@@ -75,9 +76,9 @@ print("Test set: ", X_test_norm.shape)
 
 ax.print_div("Loading pre-trained models")
 
-file2load = os.path.join(df_conf.DIR_SAVE, "arr_models_ind.joblib")
+file2load = os.path.join(df_conf.DIR_MODEL, "arr_models_ind.joblib")
 d_train = load(file2load)
-file2load =  os.path.join(df_conf.DIR_SAVE, "ensemble_model.joblib")
+file2load =  os.path.join(df_conf.DIR_MODEL, "ensemble_model.joblib")
 clf = load(file2load)
 res_chs = parms_refs["res_chs"]
 
@@ -109,5 +110,5 @@ output["file"] = dirs_all
 output["QC_score"] = y_pred_probs
 output["output_label"] = y_pred
 
-output.to_csv("{}output.csv".format(df_conf.DIR_SAVE),index=False)
+output.to_csv(os.path.join(df_conf.DIR_OUTPUT, "output.csv"),index=False)
 ax.print_div("Processed input. OK!")

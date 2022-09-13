@@ -4,10 +4,12 @@ This module contains all the configuration of simulation environment
 """
 
 DIR_BAS = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "dataset"))
-DIR_SAVE = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "saves"))
+DIR_MODEL = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "saves"))
+DIR_OUTPUT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "output"))
 
-print(DIR_BAS)
-print(DIR_SAVE)
+if not os.path.exists(DIR_OUTPUT):
+  os.makedirs(DIR_OUTPUT)
+  print("The output directory is created")
 
 SMOOTHNESS = 700
 DEGREE = 5

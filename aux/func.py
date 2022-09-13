@@ -57,13 +57,14 @@ def get_profile(tck, n_samples, radius):
 
 
 def get_seq_graph(edge):
-
     dy, dx = np.array([-1,0,1,1,1,0,-1,-1]), np.array([-1,-1,-1,0,1,1,1,0])
+
     def get_neighbors(node):
         Y, X = node[0]+dy, node[1]+dx
         neighbors = edge[Y, X]
         Y, X = Y[neighbors], X[neighbors]
         return list(zip(Y,X))
+
     graph = {}
     Y, X = edge.nonzero()
     for node in zip(Y,X):
@@ -99,7 +100,7 @@ def get_spline(seg,s):
     x1,x2,y1,y2 = np.amin(nz[0]),np.amax(nz[0]),np.amin(nz[1]),np.amax(nz[1])
     M0 = seg[x1-5:x2+5,y1-5:y2+5]
     nescala = [4*M0.shape[-2],4*M0.shape[-1]]
-    M0 = resizedti(M0,nescala).astype("bool")
+    M0 = resizedti(M0, nescala).astype("bool")
     M0_ero = nima.binary_erosion(M0).astype(M0.dtype)
     con_M0 = np.logical_xor(M0_ero,M0)
     seq = get_seq_graph(con_M0)
@@ -108,10 +109,7 @@ def get_spline(seg,s):
 
 
 def resizedti(img,shape):
-    y,x = np.indices(shape)
+    y, x = np.indices(shape)
     x = x/(shape[1]/img.shape[-1])
     y = y/(shape[0]/img.shape[-2])
-    print(np.shape(img))
-    print(x)
-    print(y)
     return img[y.astype("int"), x.astype("int")]

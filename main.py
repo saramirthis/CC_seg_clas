@@ -1,3 +1,4 @@
+from ntpath import join
 import sys,os, platform, random, glob, sklearn
 #from tabulate import tabulate
 
@@ -176,8 +177,8 @@ if df_conf.FL_GRAPH:
     plt.show()
 
 if df_conf.FL_SAVE:
-    ax.print_div("Saving individual SVM"s")
-    file2save = "{}arr_models_ind.joblib".format(df_conf.DIR_SAVE)
+    ax.print_div("Saving individual SVM's")
+    file2save = os.path.join(df_conf.DIR_MODEL, "arr_models_ind.joblib")
     dump(d_train, file2save)
 
 ax.print_div("Tunning ensemble size")
@@ -297,12 +298,12 @@ print("Best separation threshold: {}".format(opt_th))
 
 if df_conf.FL_SAVE:
     ax.print_div("Saving best ensemble")
-    file2save = "{}ensemble_model.joblib".format(df_conf.DIR_SAVE)
+    file2save = "{}ensemble_model.joblib".format(df_conf.DIR_MODEL)
     dump(clf, file2save)
 
     ax.print_div("Saving reference parameters")
     save_sign_refs = {"prof_ref": prof_vec[0:1], "val_norm": val_norm, "res_chs": res_chs, "opt_th": opt_th}
-    file2save = "{}sign_refs.joblib".format(df_conf.DIR_SAVE)
+    file2save = os.path.join(df_conf.DIR_MODEL, "sign_refs.joblib")
     dump(save_sign_refs, file2save)
 
 ax.print_div("Testing best ensemble")
